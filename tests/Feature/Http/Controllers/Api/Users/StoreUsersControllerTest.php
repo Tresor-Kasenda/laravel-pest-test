@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Action\Projects\AddProjectToUserAction;
+use App\Action\Projects\StoreProjectToUsersAction;
 use App\Mail\Api\Users\StoreUserEmail;
+use App\Models\Project;
 use App\Models\User;
-
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +35,8 @@ it('can not create users  and displayed errors fields', function (): void {
         uri: 'api/users',
         data: []
     )
-        ->assertStatus(302);
+        ->assertStatus(Response::HTTP_FOUND)
+        ->assertInvalid();
 
     $users->assertSessionHasErrors([
         'name' => 'The name field is required.',
@@ -88,4 +91,18 @@ it('can send confirmation email after register', function (): void {
         'name' => 'kasenda',
         'email' => 'kasenda@gmail.com',
     ]);
+});
+
+it('mock project action storing', function () {
+    $project = Project::factory()->create();
+    $user = User::factory()->create();
+
+    (new StoreProjectToUsersAction())
+        ->handle($user, $project);
+
+    expect($user->projects)
+        ->toHaveCount(1)
+        ->first()
+        ->id
+        ->toEqual($project->id);
 });

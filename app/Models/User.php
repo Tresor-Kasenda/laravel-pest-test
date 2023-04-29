@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +14,6 @@ final class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
-    use HasUlids;
     use Notifiable;
 
     protected $fillable = [
@@ -36,6 +33,6 @@ final class User extends Authenticatable
 
     public function projects(): HasMany
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class, 'user_id');
     }
 }

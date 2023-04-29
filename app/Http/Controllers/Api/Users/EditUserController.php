@@ -6,15 +6,18 @@ namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Resources\Api\Users\ListUsersResources;
 use App\Repositories\UsersRepository;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EditUserController
 {
-    public function __construct(protected readonly UsersRepository $repository)
+    public function __construct(
+        protected readonly UsersRepository $repository
+    )
     {
     }
 
-    public function __invoke(string $id)
+    public function __invoke(string $id): JsonResponse
     {
         $user = $this->repository->showUser(id: $id);
 

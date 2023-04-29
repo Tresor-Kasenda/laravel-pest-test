@@ -9,7 +9,9 @@ use App\Repositories\UsersRepository;
 
 final class StoreUsersPipeline
 {
-    public function __construct(protected readonly UsersRepository $repository)
+    public function __construct(
+        protected readonly UsersRepository $repository
+    )
     {
     }
 

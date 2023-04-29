@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\Users;
+namespace App\Http\Controllers\Api\Projects;
 
-use App\Http\Resources\Api\Users\ListUsersResources;
-use App\Repositories\UsersRepository;
+use App\Http\Resources\Api\Projects\ListProjectResource;
+use App\Repositories\ProjectRepository;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ListeUsersController
+final class ListsProjectController
 {
     public function __construct(
-        protected readonly UsersRepository $repository
+        protected readonly ProjectRepository $repository
     )
     {
     }
@@ -20,7 +20,7 @@ final class ListeUsersController
     public function __invoke(): JsonResponse
     {
         return response()->json(
-            data: ListUsersResources::make($this->repository->getUsersLists()),
+            data: ListProjectResource::make($this->repository->projects()),
             status: Response::HTTP_OK
         );
     }

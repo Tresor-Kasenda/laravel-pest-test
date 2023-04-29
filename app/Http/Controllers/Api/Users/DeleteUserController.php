@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class DeleteUserController
 {
-    public function __construct(protected readonly UsersRepository $repository)
+    public function __construct(
+        protected readonly UsersRepository $repository
+    )
     {
     }
 

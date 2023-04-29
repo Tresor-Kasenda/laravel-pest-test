@@ -17,14 +17,12 @@ beforeEach(fn () => $this->user = User::factory()->create([
 it('test_email_can_be_verified', function (): void {
     Event::fake();
 
-    $verificationUrl = URL::temporarySignedRoute(
-        'verification.verify',
-        now()->addMinutes(60),
-        ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
-    );
-
     actingAs($this->user)
-        ->get($verificationUrl)
+        ->get(URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
+        ))
         ->assertRedirect(config('app.frontend_url').RouteServiceProvider::HOME.'?verified=1');
 
     Event::assertDispatched(Verified::class);
@@ -32,13 +30,11 @@ it('test_email_can_be_verified', function (): void {
 });
 
 it('test_email_is_not_verified_with_invalid_hash', function (): void {
-    $verificationUrl = URL::temporarySignedRoute(
+    actingAs($this->user)->get(URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),
         ['id' => $this->user->id, 'hash' => sha1('wrong-email')]
-    );
-
-    actingAs($this->user)->get($verificationUrl);
+    ));
 
     $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
 });

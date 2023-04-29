@@ -18,5 +18,3 @@ test('used models in to repositories folders')
     ->expect('App\Models')
     ->toBeUsedIn('App\Repositories')
     ->toBeUsedIn('App\Policies');
-
-

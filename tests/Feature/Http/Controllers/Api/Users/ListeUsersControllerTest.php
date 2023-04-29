@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
+beforeEach(fn () => $this->user = User::factory()->create());
+
 it('unauthenticated users information', function (): void {
     get('/api/users/')
         ->assertStatus(Response::HTTP_FOUND)
@@ -17,9 +19,9 @@ it('unauthenticated users information', function (): void {
 
 it('list of users in applications', function (): void {
     $users = User::factory()->count(10)->create();
-    actingAs(User::factory()->create())
+    actingAs($this->user)
         ->get(uri: 'api/users')
-        ->assertOk()
+        ->assertStatus(Response::HTTP_OK)
         ->assertJsonCount(11);
 
     expect($users)
@@ -30,10 +32,10 @@ it('list of users in applications', function (): void {
 
 it('delete user information', function (): void {
     $user = User::factory()->create();
-
-    actingAs(user: $user)
+    actingAs($user)
         ->delete(
             uri: '/api/users/'.$user->id
         )
-        ->assertStatus(Response::HTTP_NO_CONTENT);
+        ->assertStatus(Response::HTTP_NO_CONTENT)
+        ->assertNoContent();
 });

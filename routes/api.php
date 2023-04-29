@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\Projects\DetailProjectController;
+use App\Http\Controllers\Api\Projects\ListsProjectController;
+use App\Http\Controllers\Api\Projects\StoreProjectController;
 use App\Http\Controllers\Api\Users\DeleteUserController;
 use App\Http\Controllers\Api\Users\EditUserController;
 use App\Http\Controllers\Api\Users\ListeUsersController;
@@ -18,3 +21,7 @@ Route::get('users/{id}', EditUserController::class)->middleware('auth');
 Route::put('users/{id}', UpdateUsersController::class)->middleware('auth');
 Route::post('users', StoreUsersController::class)->middleware('auth');
 Route::delete('users/{id}', DeleteUserController::class)->middleware('auth');
+
+Route::get('projects', ListsProjectController::class)->middleware('auth');
+Route::get('projects/{id}', DetailProjectController::class)->middleware('auth');
+Route::post('projects', StoreProjectController::class)->middleware('auth');
